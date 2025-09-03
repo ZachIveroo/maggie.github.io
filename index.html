@@ -3,38 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Study Tracker</title>
+    <title>Study Tracker Waffle Grid</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Times New Roman', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #ff9a3d 0%, #ff6f3d 100%);
+            background-color: #ffffff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0px;
+            padding: 20px;
         }
         
         .container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            background-color: #ffffff;
+            border-radius: 8px;
             padding: 20px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1100px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         h1 {
             text-align: center;
-            color: #d35400;
+            color: #37352f;
             margin-bottom: 15px;
             font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .description {
+            text-align: center;
+            color: #787774;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
         }
         
         .subjects-container {
@@ -45,18 +53,21 @@
         }
         
         .subject {
-            background-color: #fff8f1;
-            border-radius: 8px;
+            background-color: #ffffff;
+            border-radius: 6px;
             padding: 12px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
             flex: 1;
+            border: 1px solid #f1f1ef;
         }
         
         .subject h2 {
             text-align: center;
-            color: #e67e22;
             margin-bottom: 10px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #f1f1ef;
         }
         
         .grid-container {
@@ -66,46 +77,66 @@
             margin-bottom: 8px;
         }
         
+        /* Adjust grid for EE1 (15 boxes) */
+        #ee1-grid {
+            grid-template-rows: repeat(4, 1fr);
+            grid-auto-rows: 0;
+            overflow-y: hidden;
+        }
+        
+        /* Adjust grid for Art (10 boxes) */
+        #art-grid {
+            grid-template-rows: repeat(3, 1fr);
+            grid-auto-rows: 0;
+            overflow-y: hidden;
+        }
+        
         .grid-item {
             width: 100%;
             aspect-ratio: 1;
-            background-color: #fdebd0;
-            border-radius: 2px;
+            background-color: #f7f6f5;
+            border-radius: 3px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
         
         .grid-item:hover {
-            background-color: #f5b041;
+            opacity: 0.8;
         }
         
-        .grid-item.clicked {
-            background-color: #e67e22;
-        }
+        /* Subject-specific colors */
+        #eng .grid-item.clicked { background-color: #C4554D; } /* Red */
+        #bio .grid-item.clicked { background-color: #548164; } /* Green */
+        #jap .grid-item.clicked { background-color: #B35488; } /* Pink */
+        #ee1 .grid-item.clicked { background-color: #C29343; } /* Yellow */
+        #art .grid-item.clicked { background-color: #CC782F; } /* Orange */
         
         .subject-stats {
             text-align: center;
             font-size: 0.85rem;
-            color: #e67e22;
+            color: #787774;
         }
         
         .total-hours {
             text-align: center;
-            padding: 10px;
-            background-color: #e67e22;
-            color: white;
+            padding: 12px;
+            background-color: #f7f6f5;
+            color: #37352f;
             border-radius: 6px;
             font-size: 1rem;
+            margin-top: 15px;
+            border: 1px solid #f1f1ef;
         }
         
         .instructions {
             margin-top: 15px;
             padding: 10px;
-            background-color: #fdebd0;
+            background-color: #f7f6f5;
             border-radius: 6px;
             font-size: 0.8rem;
-            color: #d35400;
+            color: #787774;
             text-align: center;
+            border: 1px solid #f1f1ef;
         }
         
         @media (max-width: 900px) {
@@ -114,12 +145,12 @@
             }
             
             .subject {
-                min-width: 45%;
+                min-width: 48%;
                 margin-bottom: 15px;
             }
         }
         
-        @media (max-width: 500px) {
+        @media (max-width: 600px) {
             .subject {
                 min-width: 100%;
             }
@@ -128,48 +159,57 @@
 </head>
 <body>
     <div class="container">
-        <h1>HSC TIME :(</h1>
+        <h1>HSC STUDY TIME :)</h1>
         
         <div class="subjects-container">
-            <div class="subject">
+            <div class="subject" id="eng">
                 <h2>English</h2>
                 <div class="grid-container" id="eng-grid"></div>
                 <div class="subject-stats">Hours: <span id="eng-hours">0</span></div>
             </div>
             
-            <div class="subject">
-                <h2>Biology</h2>
+            <div class="subject" id="bio">
+                <h2>Bio</h2>
                 <div class="grid-container" id="bio-grid"></div>
                 <div class="subject-stats">Hours: <span id="bio-hours">0</span></div>
             </div>
             
-            <div class="subject">
-                <h2>Art</h2>
-                <div class="grid-container" id="art-grid"></div>
-                <div class="subject-stats">Hours: <span id="art-hours">0</span></div>
+            <div class="subject" id="jap">
+                <h2>Jap</h2>
+                <div class="grid-container" id="jap-grid"></div>
+                <div class="subject-stats">Hours: <span id="jap-hours">0</span></div>
             </div>
             
-            <div class="subject">
+            <div class="subject" id="ee1">
                 <h2>EE1</h2>
                 <div class="grid-container" id="ee1-grid"></div>
                 <div class="subject-stats">Hours: <span id="ee1-hours">0</span></div>
             </div>
             
-            <div class="subject">
-                <h2>Japanese</h2>
-                <div class="grid-container" id="jap-grid"></div>
-                <div class="subject-stats">Hours: <span id="jap-hours">0</span></div>
+            <div class="subject" id="art">
+                <h2>Art</h2>
+                <div class="grid-container" id="art-grid"></div>
+                <div class="subject-stats">Hours: <span id="art-hours">0</span></div>
             </div>
         </div>
         
         <div class="total-hours">
             Total study hours: <span id="total-hours">0</span>
-   
+        </div>
+        
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const subjects = ['eng', 'bio', 'art', 'ee1', 'jap'];
-            const rows = 5;
+            // Define subjects with custom properties
+            const subjects = [
+                { id: 'eng', name: 'English', color: '#C4554D', boxes: 20 }, // Red
+                { id: 'bio', name: 'Bio', color: '#548164', boxes: 20 },     // Green
+                { id: 'jap', name: 'Jap', color: '#B35488', boxes: 20 },     // Pink
+                { id: 'ee1', name: 'EE1', color: '#C29343', boxes: 15 },     // Yellow (15 boxes)
+                { id: 'art', name: 'Art', color: '#CC782F', boxes: 10 }      // Orange (10 boxes)
+            ];
+            
             const cols = 4;
             
             // Load saved state from localStorage
@@ -177,24 +217,28 @@
             
             // Initialize each subject grid
             subjects.forEach(subject => {
-                const gridContainer = document.getElementById(`${subject}-grid`);
-                const hoursElement = document.getElementById(`${subject}-hours`);
+                const gridContainer = document.getElementById(`${subject.id}-grid`);
+                const hoursElement = document.getElementById(`${subject.id}-hours`);
                 
                 // Initialize subject state if not exists
-                if (!savedState[subject]) {
-                    savedState[subject] = {};
+                if (!savedState[subject.id]) {
+                    savedState[subject.id] = {};
                 }
+                
+                // Set custom property for grid rows
+                const rows = Math.ceil(subject.boxes / cols);
+                gridContainer.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
                 
                 let subjectHours = 0;
                 
                 // Create grid cells
-                for (let i = 0; i < rows * cols; i++) {
+                for (let i = 0; i < subject.boxes; i++) {
                     const cell = document.createElement('div');
                     cell.className = 'grid-item';
-                    cell.dataset.id = `${subject}-${i}`;
+                    cell.dataset.id = `${subject.id}-${i}`;
                     
                     // Check if this cell was previously clicked
-                    if (savedState[subject][i]) {
+                    if (savedState[subject.id][i]) {
                         cell.classList.add('clicked');
                         subjectHours++;
                     }
@@ -204,10 +248,10 @@
                         
                         // Update state
                         if (cell.classList.contains('clicked')) {
-                            savedState[subject][i] = true;
+                            savedState[subject.id][i] = true;
                             subjectHours++;
                         } else {
-                            delete savedState[subject][i];
+                            delete savedState[subject.id][i];
                             subjectHours--;
                         }
                         
@@ -230,7 +274,7 @@
             function updateTotalHours() {
                 let total = 0;
                 subjects.forEach(subject => {
-                    total += parseInt(document.getElementById(`${subject}-hours`).textContent);
+                    total += parseInt(document.getElementById(`${subject.id}-hours`).textContent);
                 });
                 document.getElementById('total-hours').textContent = total;
             }
